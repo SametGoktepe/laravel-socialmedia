@@ -38,4 +38,19 @@ class Post extends Model
     {
         return $this->morphMany(Comments::class, 'commentable')->with('user');
     }
+
+    public function likes()
+    {
+        return $this->morphMany(Like::class, 'likeable')->with('user');
+    }
+
+    public function favorites()
+    {
+        return $this->morphMany(Favorite::class, 'favoriteable')->with('user');
+    }
+
+    public function repost_user()
+    {
+        return $this->hasManyThrough(User::class, Repost::class, 'post_id', 'id', 'id', 'user_id');
+    }
 }

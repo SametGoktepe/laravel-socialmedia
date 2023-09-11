@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\AuthController;
+use App\Http\Controllers\api\PostController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -28,5 +29,11 @@ Route::controller(AuthController::class)->name('api.auth')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::controller(Controller::class)->name('api.test')->group(function () {
         Route::get('/', 'welcome')->name('welcome')->middleware('check.auth');
+    });
+
+    Route::controller(PostController::class)->prefix('posts')->name('api.post')->group(function () {
+        Route::get('/', 'posts');
+        Route::post('/', 'create');
+        Route::post('/repost/{id}', 'repost');
     });
 });
