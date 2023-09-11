@@ -4,13 +4,38 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Multicaret\Acquaintances\Traits\CanBeFollowed;
+use Multicaret\Acquaintances\Traits\CanBeLiked;
+use Multicaret\Acquaintances\Traits\CanBeRated;
+use Multicaret\Acquaintances\Traits\CanBeVoted;
+use Multicaret\Acquaintances\Traits\CanFavorite;
+use Multicaret\Acquaintances\Traits\CanFollow;
+use Multicaret\Acquaintances\Traits\CanLike;
+use Multicaret\Acquaintances\Traits\CanRate;
+use Multicaret\Acquaintances\Traits\CanVote;
+use Multicaret\Acquaintances\Traits\Friendable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens,
+        HasFactory,
+        Notifiable,
+        SoftDeletes,
+        Friendable,
+        CanFavorite,
+        CanBeFollowed,
+        CanFollow,
+        CanBeLiked,
+        CanLike,
+        CanRate,
+        CanBeRated,
+        CanRate,
+        CanVote,
+        CanBeVoted;
 
     /**
      * The attributes that are mass assignable.
@@ -21,6 +46,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone',
+        'avatar',
+        'dob',
+        'age',
+        'fcm',
     ];
 
     /**
@@ -42,4 +72,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    public function reposts()
+    {
+        return $this->hasMany(Repost::class);
+    }
+
 }
